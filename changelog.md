@@ -39,3 +39,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - register function
 - fetchUserById function
 - user account model
+- security feature for API
