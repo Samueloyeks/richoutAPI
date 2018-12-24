@@ -11,7 +11,7 @@ exports.sendResponse = function (obj) {
             response.data = obj.data;
             break;
  
-        case 'not found':
+        case 'not found': 
             response.headerCode = 404;
             // response.fileName = 'error';
             response.status = 'error'
