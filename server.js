@@ -19,7 +19,7 @@ const app = http.createServer((req, res) => {
   try{
     if(file = require('./controllers/'+String(url[1]))){
       progress = "found controller";
-      if(res.write(file[url[2]]())){
+      if(file[url[2]]()){
         progress = "found function";
       }
     }
@@ -28,8 +28,7 @@ const app = http.createServer((req, res) => {
     console.log(ex);
     if(progress == "default"){
       responseObject.type = 'not found';
-      response = utilities.sendResponse(responseObject);
-      
+      response = utilities.sendResponse(responseObject);  
     }else{
       responseObject.type = 'function not found';
       response = utilities.sendResponse(responseObject);
