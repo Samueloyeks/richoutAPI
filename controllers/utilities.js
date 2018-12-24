@@ -2,7 +2,7 @@ exports.utilitiesModel = require('../models/utilitiesModel');
 
 exports.sendResponse = function (obj) {
     let response = {};
-
+    
     switch (obj.type) {
         case 'function not found':
             response.headerCode = 400;
@@ -18,19 +18,23 @@ exports.sendResponse = function (obj) {
             response.message = ' not found on server';
             response.data = obj.data;
             break;
-            /*
+           
         case 'request failed':
-            //header;
-            // response.fileName = 'error';
-            response.status = utilitiesModel.status;
+            response.headerCode = 404;
+            
+            //response.fileName = 'error';
+            response.status = "error";
             response.message = utilitiesModel.message;
             response.data = utilitiesModel.obj;
             break;
+         /*
         case 'request succesful':
             //header;
             // response.fileName = 'error';
             response.status = utilitiesModel.status;
-            response.message = utilitiesModel.message;
+            // if obj.msg
+            response.message = obj.message;
+            //else 
             response.data = utilitiesModel.obj;
             break;
         case '500':
