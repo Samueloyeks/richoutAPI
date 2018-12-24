@@ -1,8 +1,14 @@
 
 
-exports.register = function(){
-    return "samuel is the new CHICKEN";
-};
+exports.register = function(data){
+   
+    data.data = data;
+    data.status = "success";
+    data.message = "something is not right"
+
+    return data;
+ }
+
 
 
 

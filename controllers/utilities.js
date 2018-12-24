@@ -1,13 +1,14 @@
 exports.utilitiesModel = require('../models/utilitiesModel');
 
 exports.sendResponse = function (obj) {
+    console.log("got here 1")
     let response = {};
-    utilitiesModel.status = 'error';
+    var status = "error";
     switch (obj.type) {
         case 'function not found':
             response.headerCode = 400;
             response.fileName = 'error';
-            response.status = utilitiesModel.status;
+            response.status = status;
             response.message = ' not found on server';
             response.data = obj.data;
             break;
@@ -15,57 +16,59 @@ exports.sendResponse = function (obj) {
         case 'not found':
             response.headerCode = 404;
             // response.fileName = 'error';
-            response.status = utilitiesModel.status;
+            response.status = status;
             response.message = ' not found on server';
             response.data = obj.data;
             break;
 
         case 'request failed':
-            //header;
             // response.fileName = 'error';
-            response.status = utilitiesModel.status;
-            response.message = utilitiesModel.message;
-            response.data = utilitiesModel.obj;
+            response.headerCode = 400;            
+            response.status = status;
+            response.message = "Request Failed";
+            response.data =  obj.data;
             break;
         case 'request succesful':
-            //header;
+            
             // response.fileName = 'error';
-            response.status = 'Successful'
-            if (obj.msg) {
-                response.message = utilitiesModel.message;
+            response.headerCode = 200;
+            response.status = 'success'
+            /* if (obj.message) {
+                response.message = obj.message;
             } else {
                 response.message = "Your request was succesful";
-            }
-            response.data = utilitiesModel.obj;
+            } */
+            response.message = "Request Failed";
+            response.data = obj.data;
             break;
         case '500':
-            //header;
+            response.headerCode = 500;
             // response.fileName = 'error';
-            if (obj)
-                response.status = utilitiesModel.status;
-            response.message = utilitiesModel.message;
-            response.data = utilitiesModel.obj;
+            //if (obj)
+            response.status = status;
+            response.message = message;
+            response.data = obj.data;
             break;
         case '409':
-            //header;
+            response.headerCode = 409;
             // response.fileName = 'error';
-            response.status = utilitiesModel.status;
-            response.message = utilitiesModel.message;
-            response.data = utilitiesModel.obj;
+            response.status = status;
+            response.message = message;
+            response.data = obj.data;
             break;
         case '401':
-            //header;
+            response.headerCode = 401;
             // response.fileName = 'error';
-            response.status = utilitiesModel.status;
-            response.message = utilitiesModel.message;
-            response.data = utilitiesModel.obj;
+            response.status = status;
+            response.message = message;
+            response.data = obj.data;
             break;
 
         default:
             break;
     }
 
-    return response;
+   return response;
 }
 
 // 
