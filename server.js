@@ -19,19 +19,20 @@ const app = http.createServer((req, res) => {
   try{ 
     file = require('./controllers/'+String(url[1]));
     // call the function using dynamic function name and dynamic module name
-    res.write('first succeed');
+    //res.write('first succeed');
+    
   }catch(ex){
     console.log(ex);
     res.write('first failed?!')
   };
 
-
   try{
-    res.write(file[url[2]]());
+    file[url[2]]();
   }catch(ex){
     console.log(ex);
     res.write('second failed?!')
   };
+  
 
 /*   var file = require(fileNmae);
  */
