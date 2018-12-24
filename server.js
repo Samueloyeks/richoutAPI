@@ -1,60 +1,50 @@
 const http = require('http');
+const utilities = require('./controllers/utilities');
 
-
+let responseObject = utilities.utilitiesModel.sendResponseObj;
+let response = '';
 const hostname = '127.0.0.1';
 const port = 3000;
 
-let file= '';
-
 const app = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json');
+
 
   var url = req.url.split('/');
   //var fileName = '../controllers/'+String(url[1])
   var fileName = './controllers'+req.url
 
   var controller = '';
- 
-  try{ 
-    file = require('./controllers/'+String(url[1]));
-    // call the function using dynamic function name and dynamic module name
-    //res.write('first succeed');
-    
-  }catch(ex){
-    console.log(ex);
-    res.write('first failed?!')
-  };
 
+  var progress = 'default';
   try{
-    file[url[2]]();
+    if(file = require('./controllers/'+String(url[1]))){
+      progress = "found controller";
+      if(res.write(file[url[2]]())){
+        progress = "found function";
+      }
+    }
+
   }catch(ex){
     console.log(ex);
-    res.write('second failed?!')
-  };
-  
-
-/*   var file = require(fileNmae);
- */
-
-  /* try {
-      file.statSync('path/to/file');
-      console.log('file or directory exists');
-  }
-  catch (err) {
-    if (err.code === 'ENOENT') {
-      console.log('file or directory does not exist');
+    if(progress == "default"){
+      responseObject.type = 'not found';
+      response = utilities.sendResponse(responseObject);
+      
+    }else{
+      responseObject.type = 'function not found';
+      response = utilities.sendResponse(responseObject);
     }
-  } */
-  res.write(fileName)
-  
+    
+    
+  };
+
+
+  res.writeHead(response.headerCode,utilities.utilitiesModel.headers);
+  res.write(JSON.stringify(response));
   res.end();
+  return 0;
 });
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-
-/// changes for zino branch
-// samuel is a big tilapia

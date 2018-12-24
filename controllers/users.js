@@ -1,7 +1,7 @@
 
 
 exports.register = function(){
-    return "samuel is the new fish";
+    return "samuel is the new CHICKEN";
 };
 
 
