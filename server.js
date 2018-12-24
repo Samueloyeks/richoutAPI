@@ -21,6 +21,8 @@ const app = http.createServer((req, res) => {
       progress = "found controller";
       if(file[url[2]]()){
         progress = "found function";
+        responseObject.type = 'request succesful';
+        response = utilities.sendResponse(responseObject);
       }
     }
 
@@ -47,3 +49,5 @@ const app = http.createServer((req, res) => {
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+
