@@ -1,13 +1,13 @@
 
 
-exports.register = function(data){
-   
-    data.data = data;
+exports.register = new Promise (function(resolve,reject){
+    var data = {};
+    data.data = {"me":"you"};
     data.status = "success";
     data.message = "something is not right"
 
-    return data;
- }
+    resolve(data);
+ });
 
 
 

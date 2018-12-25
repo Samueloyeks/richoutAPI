@@ -1,73 +1,71 @@
 const http = require('http');
 const utilities = require('./controllers/utilities');
 
-let responseObject = utilities.utilitiesModel.sendResponseObj;
+let responseObj = utilities.models.responseObj;
 let response = '';
 const hostname = '127.0.0.1';
 const port = 3000;
 
-const app = http.createServer((req, res) => {
+let file= Array();
 
+const app = http.createServer((req, res) => {
+  //res.statusCode = 200;
+  //res.setHeader('Content-Type', 'application/json');
 
   var url = req.url.split('/');
   //var fileName = '../controllers/'+String(url[1])
   var fileName = './controllers'+req.url
-  var file = '';
+
   var controller = '';
-
-  var progress = 'default';
-  try{
-    if(file = require('./controllers/'+String(url[1]))){
-      progress = "found controller";
-      
-      var result = file[url[2]]({"randomData":"random"});
-
-      progress = "found function";
-      
-      if(result.status == 'success'){
-        responseObject.type = 'request succesful';
-        
-      }else{
-        responseObject.type = 500;
-      }
-     
-      
-      responseObject.data = result.data;
-      responseObject.message = result.message;
-    
-    }
-    
+  
+  try{ 
+    file = require('./controllers/'+String(url[1]));
+    // call the function using dynamic function name and dynamic module name
+    //res.write('first succeed');
   }catch(ex){
     console.log(ex);
-    if(progress == "default"){
-      responseObject.type = 'not found';
-      
-    }else if(progress == "found controller"){
-      responseObject.type = 'function not found';
-    }
-    
+    res.write('first failed?!'+String(ex))
+    endRequest();
     
   };
-  
-  try{response = utilities.sendResponse(responseObject.type)}
-  catch(ex){
-    console.log(ex);
-    //res.write(responseObject.type);
-    res.write(String(ex));
-  }
-  
-      
-// res.write(response)
-  //res.write(JSON.stringify(response));
-  //res.write(JSON.stringify(utilities.sendResponse(responseObject)));
-  //res.write(JSON.stringify(utilities.utilitiesModel.headers));
 
-  //res.writeHead(response.headerCode,utilities.utilitiesModel.headers);
-  utilities.sendResponse(responseObject.type)
-  console.log(responseObject)
-  res.write(JSON.stringify(responseObject));
-  res.end();
-  return 0;
+
+  try{
+    //res.write(file[url[2]]());
+    var functionName = url[2];
+
+    file[functionName].then(function(result){
+      console.log(result)
+      
+      responseObj['data'] = result['data'];
+      responseObj['status'] = result['status'];
+      responseObj.message = result.message;
+      responseObj.headerCode = utilities.models.resCodes.request_succesful.code;
+      
+      console.log("comparing both value \n")
+      console.log(responseObj)
+      
+      endRequest();
+    },
+  function(error){
+    res.write(error);
+    responseObj.type = 400;
+    endRequest();
+  })
+  }catch(ex){
+    console.log(ex);
+    res.write('first failed?!'+String(ex)+String(file[url[2]]))
+    endRequest();
+    
+  };
+
+
+  function endRequest(){
+    res.writeHead(responseObj.headerCode,utilities.models.headers);
+    res.write(JSON.stringify(responseObj));
+    res.end();
+    return false;
+  }
 });
 
 app.listen(port, hostname, () => {
