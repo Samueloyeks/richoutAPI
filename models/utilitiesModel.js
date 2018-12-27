@@ -7,6 +7,11 @@ exports.responseObj = {
 
 exports.headers = {'Content-Type': 'application/json'}
 
+exports.firebaseConfig = {
+  
+};
+
+
 exports.resCodes = {
     'function_not_found': {
         "code":400,
@@ -19,6 +24,10 @@ exports.resCodes = {
     'request_failed':{
         "code":400,     
         "message":"An error occured while performing request"  
+    },
+    'invalid_data':{
+        "code":400,     
+        "message":"Invalid data format"  
     },
     'request_succesful':{
         "code":200,
