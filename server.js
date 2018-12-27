@@ -1,7 +1,7 @@
 const http = require('http');
 const utilities = require('./controllers/utilities');
-let firebase = utilities.firebase;
-require("firebase/database");
+
+
 // allow after authentication
 
 
@@ -27,7 +27,7 @@ const app = http.createServer((req, res) => {
       data = JSON.parse(data)
       
     }catch(ex){
-      responseObj['data'] = data;
+      //responseObj['data'] = data;
       responseObj['status'] = 'error';
       responseObj.message = utilities.models.resCodes.invalid_data.message;
       responseObj.headerCode = utilities.models.resCodes.invalid_data.code;
@@ -40,7 +40,6 @@ const app = http.createServer((req, res) => {
   function processRequest(data){
     //res.statusCode = 200;
     //res.setHeader('Content-Type', 'application/json');
-    console.log(req);
     var url = req.url.split('/');
     //var fileName = '../controllers/'+String(url[1])
     var fileName = './controllers'+req.url
@@ -65,27 +64,25 @@ const app = http.createServer((req, res) => {
 
       // pass data to dynamic promise function # module.function(data).then....
       file[functionName](data).then(function(result){
-        console.log(result)
-        
         responseObj['data'] = result['data'];
         responseObj['status'] = result['status'];
         responseObj.message = result.message;
         responseObj.headerCode = utilities.models.resCodes.request_succesful.code;
         
-        console.log("comparing both value \n")
-        console.log(responseObj)
-        
         endRequest();
       },
     function(error){
-      res.write(error);
-      responseObj.type = 400;
+      responseObj['data'] = error['data'];
+      responseObj['status'] = error['status'];
+      responseObj.message = error.message;
+      responseObj.headerCode = utilities.models.resCodes.request_failed.code;
+        
       endRequest();
     })
   }catch(ex){
     console.log(ex);
     res.write('first failed?!'+String(ex)+String(file[url[2]]))
-    endRequest();
+    endRequest  ();
     
   };
 

@@ -8,9 +8,13 @@ exports.responseObj = {
 exports.headers = {'Content-Type': 'application/json'}
 
 exports.firebaseConfig = {
-  
+    apiKey: "AIzaSyA1yiQ3hn5sJjva5DPLzCNcD3JkGEyI9Dk",
+    authDomain: "rich-out.firebaseapp.com",
+    databaseURL: "https://rich-out.firebaseio.com",
+    projectId: "rich-out",
+    storageBucket: "rich-out.appspot.com",
+    messagingSenderId: "550404557767"
 };
-
 
 exports.resCodes = {
     'function_not_found': {
