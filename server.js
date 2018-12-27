@@ -82,16 +82,19 @@ const app = http.createServer((req, res) => {
   }catch(ex){
     console.log(ex);
     res.write('first failed?!'+String(ex)+String(file[url[2]]))
-    endRequest  ();
+    endRequest();
     
   };
 
   }
 
   function endRequest(){
+    console.log("\n\n New write about to happen\n")
     res.writeHead(responseObj.headerCode,utilities.models.headers);
     res.write(JSON.stringify(responseObj));
     res.end();
+    console.log("\n\n Application Ended\n")
+    
     return false;
   }
 });

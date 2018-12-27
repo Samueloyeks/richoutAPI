@@ -41,5 +41,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### pending
 - login function
 - fetchUserById function
-
+- add response for invalid endpoint calls
 - security feature for API
