@@ -25,18 +25,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.0.1] - 2018-03-13
 ### Added
 - users module
+- user account model
+- process payload
+- channel all response through single function
 
 ### Changed 
 -
 ### Remove
 - 
 ### Fixed
-- channel all response through single function
-- process payload
 - 
+### in progress
+- register function
+ - update rest of user information on register successful firebase
 ### pending
 - login function
-- register function
 - fetchUserById function
-- user account model
+
 - security feature for API
