@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### in progress
 - register function
  - update rest of user information on register successful firebase
+ - attemp to fix server crashing after write
 ### pending
 - login function
 - fetchUserById function
