@@ -2,13 +2,20 @@ const http = require('http');
 const utilities = require('./controllers/utilities');
 
 
-// allow after authentication
-
 
 let responseObj = utilities.models.responseObj;
 let response = '';
-const hostname = '127.0.0.1';
-const port = 3000;
+let port = "";
+let hostname = "";
+///application state (live/test)
+if(utilities.models.appConfig.appState == 'live'){
+  hostname = utilities.models.appConfig.liveHostName;
+  port = utilities.models.appConfig.liveHostName;
+}else{
+  hostname = utilities.models.appConfig.testHostName;
+  port = utilities.models.appConfig.testPort;
+}
+
 
 
 utilities.firebase.initializeApp(utilities.models.firebaseConfig);
@@ -16,6 +23,19 @@ utilities.firebase.initializeApp(utilities.models.firebaseConfig);
 let file= Array();
 
 const app = http.createServer((req, res) => {
+
+// allow access after api authentication is successful
+if(utilities.validateAuth(req,utilities.models.appConfig)){
+  // validation succesful
+  console.log('validation successful')
+}else{
+  //validation failed
+  responseObj['status'] = 'error';
+  responseObj.message = utilities.models.resCodes['401'].message;
+  responseObj.headerCode = utilities.models.resCodes['401'].code;
+  endRequest();
+}
+
 
   let data = []
   req.on('data', chunk => {
@@ -89,13 +109,17 @@ const app = http.createServer((req, res) => {
   }
 
   function endRequest(){
-    console.log("\n\n New write about to happen\n")
+    console.log("\nNew write about to happen")
     res.writeHead(responseObj.headerCode,utilities.models.headers);
-    res.write(JSON.stringify(responseObj));
-    res.end();
-    console.log("\n\n Application Ended\n")
+    res.write(JSON.stringify(responseObj),function(success){res.end()},function(error){res.end();
+    });
+    
     
     return false;
+    /* console.log("\nApplication Ended")
+    
+    return false;
+    console.log('suprise me!') */
   }
 });
 

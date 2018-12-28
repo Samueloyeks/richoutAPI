@@ -1,7 +1,7 @@
-utilities = require('./utilities');
+let utilities = require('../controllers/utilities');
+
+require("../models/firebase");
 let firebase = utilities.firebase;
-require("firebase/database");
-require("firebase/auth");   
 
 exports.register = function(data){
     

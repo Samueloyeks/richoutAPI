@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - user account model
 - process payload
 - channel all response through single function
-
+- security feature for API (Basic Auth)
 ### Changed 
 -
 ### Remove
@@ -42,4 +42,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - login function
 - fetchUserById function
 - add response for invalid endpoint calls
-- security feature for API

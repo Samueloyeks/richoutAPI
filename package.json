@@ -18,6 +18,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/richoutng/richoutapi#readme",
   "dependencies": {
-    "firebase": "^5.7.1"
+    "basic-auth": "^2.0.1",
+    "firebase": "^5.7.1",
+    "tsscmp": "^1.0.6"
   }
 }
