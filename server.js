@@ -111,6 +111,7 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
   function endRequest(){
     console.log("\nNew write about to happen")
     res.writeHead(responseObj.headerCode,utilities.models.headers);
+   
     res.write(JSON.stringify(responseObj),function(success){res.end()},function(error){res.end();
     });
     

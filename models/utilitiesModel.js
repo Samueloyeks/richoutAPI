@@ -5,7 +5,11 @@ exports.responseObj = {
     "data":null
 }
 
-exports.headers = {'Content-Type': 'application/json'}
+exports.headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin':'*',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+}
 
 exports.firebaseConfig = {
     apiKey: "AIzaSyA1yiQ3hn5sJjva5DPLzCNcD3JkGEyI9Dk",
