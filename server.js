@@ -84,8 +84,8 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
 
       // pass data to dynamic promise function # module.function(data).then....
       file[functionName](data).then(function(result){
-        responseObj['data'] = result['data'];
-        responseObj['status'] = result['status'];
+        responseObj.data = result['data'];
+        responseObj.status  = result['status'];
         responseObj.message = result.message;
         responseObj.headerCode = utilities.models.resCodes.request_succesful.code;
         
@@ -112,10 +112,10 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     console.log("\nNew write about to happen")
     res.writeHead(responseObj.headerCode,utilities.models.headers);
    
-    res.write(JSON.stringify(responseObj),function(success){res.end()},function(error){res.end();
+/*     res.write(JSON.stringify(responseObj),function(success){},function(error){res.end();
     });
-    
-    
+     */
+    res.end(JSON.stringify(responseObj));
     return false;
     /* console.log("\nApplication Ended")
     
