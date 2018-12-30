@@ -22,24 +22,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Security
 - 
-## [0.0.1] - 2018-03-13
+## [0.0.2] - 2018-01-03
+### Added
+- 
+### Changed 
+-
+### Remove
+- 
+### Fixed
+-
+### in progress
+
+### pending
+
+- fetchUserById function
+
+## [0.0.1] - 2018-12-30
 ### Added
 - users module
 - user account model
 - process payload
 - channel all response through single function
 - security feature for API (Basic Auth)
+- login function
+- register function
+ - update rest of user information on register successful firebase
+- add response for invalid endpoint calls
 ### Changed 
 -
 ### Remove
 - 
 ### Fixed
-- 
+- api cashing when non existing route is called
+- fix server crashing after write
 ### in progress
-- register function
- - update rest of user information on register successful firebase
- - attemp to fix server crashing after write
+
 ### pending
-- login function
+
 - fetchUserById function
-- add response for invalid endpoint calls

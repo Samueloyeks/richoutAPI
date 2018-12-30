@@ -82,6 +82,7 @@ exports.login = function(data){
             firebase.database().ref(`/userProfile/` + result.user.uid).once('value').then(function(snapshot) {
                 uData = snapshot.val();
                 delete uData['password'];
+                uData['uid']= snapshot.key;
                 response = {
                     status:'success',
                     message:'Login Successful',
@@ -110,6 +111,54 @@ exports.login = function(data){
             }
             reject(response);
         });
+        
+        
+    });
+
+}
+
+
+exports.fetchUserById = function(data){
+    
+    return new Promise (function(resolve,reject){
+        let userModel =  require('../models/userModel');
+        userModel = userModel.user;
+        let response = new Object();
+        try{
+            
+            userModel.uid = data.uid;
+           
+        }catch(ex){
+            // data validation failed
+            console.log('fetchUserById:data validation failed')
+        }
+       
+        firebase.database().ref(`/userProfile/` + data.uid).once('value').then(function(snapshot) {
+           console.log('got here')
+            uData = snapshot.val();
+           console.log(uData)
+            
+            delete uData['password'];
+            response = {
+                status:'success',
+                message:'data retrieved successfully',
+                data:uData
+            }
+            resolve(response);
+            
+            //Email sent
+        }).catch(function(error) {
+        // Handle Errors here.
+        var message = "";
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        response = {
+            'status':'error',
+            'message':'Invalid user id',
+            'data':data
+        }
+        reject(response);
+    });
         
         
     });
