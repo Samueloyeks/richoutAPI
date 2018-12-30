@@ -41,6 +41,10 @@ exports.resCodes = {
         "code":200,
         "message":"Request Successful"
     },
+    'route_not_found':{
+        "code":500,
+        "message":"Cannot find route"
+    },
     '500': {
         "code":500,
         "message":""

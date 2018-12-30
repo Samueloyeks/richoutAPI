@@ -71,8 +71,9 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
       // call the function using dynamic function name and dynamic module name
       //res.write('first succeed');
     }catch(ex){
-      console.log(ex);
-      res.write('first failed?!'+String(ex))
+      responseObj['status'] = 'error';
+      responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
+      responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
       endRequest();
       
     };
@@ -100,8 +101,9 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
       endRequest();
     })
   }catch(ex){
-    console.log(ex);
-    res.write('first failed?!'+String(ex)+String(file[url[2]]))
+    responseObj['status'] = 'error';
+    responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
+    responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
     endRequest();
     
   };
