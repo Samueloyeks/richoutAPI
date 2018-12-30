@@ -19,7 +19,6 @@
   "homepage": "https://bitbucket.org/richoutng/richoutapi#readme",
   "dependencies": {
     "basic-auth": "^2.0.1",
-    "cors": "^2.8.5",
     "firebase": "^5.7.1",
     "tsscmp": "^1.0.6"
   }
