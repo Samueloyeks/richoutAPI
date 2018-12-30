@@ -59,6 +59,10 @@ exports.resCodes = {
     '401': {
         "code":401,
         "message":"API Authentication Failed"
+    },
+    '204': {
+        "code":204,
+        "message":"Handle Options CORS Request"
     }
 }
 

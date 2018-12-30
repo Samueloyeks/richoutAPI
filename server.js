@@ -34,6 +34,14 @@ let file= Array();
 
 const app = http.createServer((req, res) => {
 
+// handle cors options
+if (req.method === 'OPTIONS') {
+  responseObj['status'] = 'error';
+  responseObj.message = utilities.models.resCodes['204'].message;
+  responseObj.headerCode = utilities.models.resCodes['204'].code;
+  endRequest();
+}
+
 // allow access after api authentication is successful
 if(utilities.validateAuth(req,utilities.models.appConfig)){
   // validation succesful
