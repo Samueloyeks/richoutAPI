@@ -13,15 +13,13 @@ exports.validateAuth = function(req,appConfig){
         console.log('credentials not provided')
     } else {
         // Simple method to prevent short-circut and use timing-safe compare
-        if(compare(credentials.name,appConfig.apiUser ) || compare(credentials.pass, appConfig.apiPass)){
-            isvalid = true;
+        if(compare(credentials.name,appConfig.apiUser ) && compare(credentials.pass, appConfig.apiPass)){
+            isValid = true;
         }else{
             // wrong credentials
             console.log('wrong credentials')
         }
-
     }
-
     return isValid;
 }
      
