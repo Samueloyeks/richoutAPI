@@ -136,7 +136,7 @@ exports.fetchUserById = function(data){
         firebase.database().ref(`/userProfile/` + data.uid).once('value').then(function(snapshot) {
            console.log('got here')
             uData = snapshot.val();
-           console.log(uData)
+           //console.log(uData)
             
             delete uData['password'];
             response = {
