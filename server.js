@@ -1,7 +1,18 @@
 const http = require('http');
 const utilities = require('./controllers/utilities');
+var cors = require('cors');
 
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
+app.use(cors(corsOptions));
 
 let responseObj = utilities.models.responseObj;
 let response = '';
@@ -125,7 +136,6 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     console.log('suprise me!') */
   }
 });
-
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
