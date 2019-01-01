@@ -48,6 +48,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - register function
  - update rest of user information on register successful firebase
 - add response for invalid endpoint calls
+- fetchUserById function
+- last seen and date created to register and login functions
 ### Changed 
 -
 ### Remove
@@ -59,4 +61,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### pending
 
-- fetchUserById function
+- users/forgotPassword
+- users/resetPassword
+- users/update

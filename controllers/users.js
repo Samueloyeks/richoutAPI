@@ -85,8 +85,8 @@ exports.login = function(data){
                 uData = snapshot.val();
                 delete uData['password'];
                 uData['uid']= snapshot.key;
-                uData.lastSeen = Date(result.user.lastLoginAt),
-                uData.dateCreated = Date(result.user.createdAt)
+                uData.lastSeen = Date(result.user.lastLoginAt);
+                uData.dateCreated = Date(result.user.createdAt);
 
                 response = {
                     status:'success',
@@ -138,10 +138,12 @@ exports.fetchUserById = function(data){
             console.log('fetchUserById:data validation failed')
         }
        
-        firebase.database().ref(`/userProfile/` + data.uid).once('value').then(function(snapshot) {
-           console.log('got here')
+        firebase.database().ref(`/userProfile/` + userModel.uid).once('value').then(function(snapshot) {
+           //console.log('got here::fetchUserById')
             uData = snapshot.val();
-           //console.log(uData)
+            //uData.lastSeen = Date(result.user.lastLoginAt);
+            //uData.dateCreated = Date(result.user.createdAt);
+            //console.log(uData)
             
             delete uData['password'];
             response = {
