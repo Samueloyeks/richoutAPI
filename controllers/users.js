@@ -90,13 +90,21 @@ exports.login = function(data){
                 uData.lastSeen = Date(result.user.lastLoginAt);
                 uData.dateCreated = Date(result.user.createdAt);
                 uData.verified = result.user.emailVerified;
-                
-                response = {
-                    status:'success',
-                    message:'Login Successful',
-                    data:uData
+                if(uData.verified){
+                    response = {
+                        status:'success',
+                        message:'Login Successful',
+                        data:uData
+                    }
+                }else{
+                    response = {
+                        status:'error',
+                        message:'Kindly Verify your email address to continue using RichOut.',
+                        data:null
+                    }
                 }
-                resolve(response);
+                
+                reject(response);
                 
                 //Email sent
             });
