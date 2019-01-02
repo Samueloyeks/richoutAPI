@@ -96,15 +96,16 @@ exports.login = function(data){
                         message:'Login Successful',
                         data:uData
                     }
+                    resolve(response);
                 }else{
                     response = {
                         status:'error',
                         message:'Kindly Verify your email address to continue using RichOut.',
-                        data:null
+                        data:uData
                     }
+                    reject(response);
                 }
                 
-                reject(response);
                 
                 //Email sent
             });
@@ -191,6 +192,7 @@ exports.update = function(data){
         let response = new Object();
         try{
             
+            userModel.uid = data.uid;
             userModel.fullName = data.fullName;
             userModel.email = data.email;
             userModel.phoneNumber = data.phoneNumber;
@@ -198,18 +200,30 @@ exports.update = function(data){
         }catch(ex){
             // data validation failed
         }
+        firebase.database().ref(`/userProfile/` + userModel.uid).update(userModel).then((result) => {
+            response = {
+                status:'success',
+                message:'data updated successfully',
+                data:result
+            }
+            resolve(response);
+            
+        })/* ;
         firebase.auth().createUserWithEmailAndPassword(userModel.email, userModel.password)
         .then(function(result){
-            firebase.database().ref(`/userProfile/` + result.user.uid).set(userModel).then(() => {
-                firebase.auth().currentUser.sendEmailVerification();
-                //Email sent
-            });
+            delete uData['password'];
+            response = {
+                status:'success',
+                message:'data retrieved successfully',
+                data:uData
+            }
+            resolve(response);
          
             
             
            // var database = firebase.database();
             //firebase.database().ref('users/' + userModel.email).set(userModel);
-        })
+        }) */
         .catch(function(error) {
             // Handle Errors here.
             var message = "";
