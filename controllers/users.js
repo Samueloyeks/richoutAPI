@@ -2,7 +2,9 @@ let utilities = require('../controllers/utilities');
 require("../models/firebase");
 let firebase = utilities.firebase;
 
-var register = function(data){
+/// modules
+
+let register = function(data){
    
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -66,7 +68,7 @@ var register = function(data){
 
 }
 
-login = function(data){
+let login = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -135,7 +137,7 @@ login = function(data){
 }
 
 
-var fetchUserById = function(data){
+let fetchUserById = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -184,7 +186,7 @@ var fetchUserById = function(data){
 
 }
 
-var update = function(data){
+let update = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -247,50 +249,44 @@ var update = function(data){
     });
 
 }
-//api.richoutfoundation.com/user/register
 
-/* public currentUserMetadata:UserMetadata;
-this.currentUserMetadata=user.metadata.creationTime  
-
-
-constructor(public http: Http) {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.currentUser = user;
-        this.userProfile = firebase.database().ref(`/userProfile/${user.uid}`);
-        this.userInfo=firebase.database().ref(`/userProfile/${user.uid}/info`);
-        this.storageRef = firebase.storage().ref(`/userProfile/${user.uid}/profilePicture.png`);
-        this.currentUserMetadata=user.metadata
-      }
-    });
+let forgotPassword = function(data){
     
-  }  */
-
-  /* this.FirebaseService.loginUserService(email,password).then((authData:any) =>{
-    console.log(authData.user);
-    if(authData.user.emailVerified){
-      loader.dismiss();
-      that.navCtrl.setRoot(TabsPage);     
-    }else{
-      loader.dismiss();
-      const Alert = this.alertCtrl.create({
-        message: 'Please verify email first',
-        buttons: [
-          { text: 'Ok', role: 'cancel' },
-        ]
-      });
-      Alert.present();
-    }
-    
-  },error=>{
-    loader.dismiss();
-    let toast=this.toastCtrl.create({
-      message:error,
-      duration:3000,
-      position:'top'
+    return new Promise (function(resolve,reject){
+        let userModel =  require('../models/userModel');
+        userModel = userModel.user;
+        let response = new Object();
+        try{
+            
+            userModel.email = data.email;
+           
+        }catch(ex){
+            // data validation failed
+            console.log('forgot password:data validation failed')
+        }
+        firebase.auth().sendPasswordResetEmail(userModel.email);
+  
+       
+        response = {
+            status:'success',
+            message:'password reset mail has been sent to '+userModel.email,
+            data:userModel
+        }
+        resolve(response);
+            
+        
     });
-    toast.present();
-   
-  });  */
+        
+        
 
-module.exports = {fetchUserById,update,register,login}
+
+}
+
+
+module.exports = {
+    fetchUserById,
+    update,
+    register,
+    login,
+    forgotPassword
+}

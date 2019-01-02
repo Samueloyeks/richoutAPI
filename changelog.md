@@ -57,6 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - api cashing when non existing route is called
 - fix server crashing after write
+- fixed user/update not checking for existing user before performing update
+-
 ### in progress
 
 ### pending
