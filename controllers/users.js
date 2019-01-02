@@ -2,7 +2,7 @@ let utilities = require('../controllers/utilities');
 require("../models/firebase");
 let firebase = utilities.firebase;
 
-exports.register = function(data){
+var register = function(data){
    
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -66,7 +66,7 @@ exports.register = function(data){
 
 }
 
-exports.login = function(data){
+login = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -135,7 +135,7 @@ exports.login = function(data){
 }
 
 
-exports.fetchUserById = function(data){
+var fetchUserById = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -184,7 +184,7 @@ exports.fetchUserById = function(data){
 
 }
 
-exports.update = function(data){
+var update = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -200,15 +200,20 @@ exports.update = function(data){
         }catch(ex){
             // data validation failed
         }
-        firebase.database().ref(`/userProfile/` + userModel.uid).update(userModel).then((result) => {
-            response = {
-                status:'success',
-                message:'data updated successfully',
-                data:result
-            }
-            resolve(response);
-            
-        })/* ;
+        fetchUserById(userModel).then(function(result){
+            firebase.database().ref(`/userProfile/` + userModel.uid).update(userModel).then((result) => {
+                response = {
+                    status:'success',
+                    message:'data updated successfully',
+                    data:result
+                }
+                resolve(response);
+                
+            })
+        },function(error){
+            reject(error);
+        })
+        /* ;
         firebase.auth().createUserWithEmailAndPassword(userModel.email, userModel.password)
         .then(function(result){
             delete uData['password'];
@@ -224,7 +229,7 @@ exports.update = function(data){
            // var database = firebase.database();
             //firebase.database().ref('users/' + userModel.email).set(userModel);
         }) */
-        .catch(function(error) {
+        /* .catch(function(error) {
             // Handle Errors here.
             var message = "";
             var errorCode = error.code;
@@ -237,7 +242,7 @@ exports.update = function(data){
             }
             reject(response);
         });
-        
+         */
         
     });
 
@@ -287,3 +292,5 @@ constructor(public http: Http) {
     toast.present();
    
   });  */
+
+module.exports = {fetchUserById,update,register,login}
