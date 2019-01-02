@@ -282,6 +282,39 @@ let forgotPassword = function(data){
 
 }
 
+let forgotPassword = function(data){
+    
+    return new Promise (function(resolve,reject){
+        let userModel =  require('../models/userModel');
+        userModel = userModel.user;
+        let response = new Object();
+        try{
+            
+            userModel.email = data.email;
+            userModel.oldPassword = data.oldPassword;
+            userModel.newPassword = data.newPassword;
+           
+        }catch(ex){
+            // data validation failed
+            console.log('forgot password:data validation failed')
+        }
+        firebase.auth.EmailAuthProvider.credential(userModel.email);
+  
+       
+        response = {
+            status:'success',
+            message:'password reset mail has been sent to '+userModel.email,
+            data:userModel
+        }
+        resolve(response);
+            
+        
+    });
+        
+        
+
+
+}
 
 module.exports = {
     fetchUserById,

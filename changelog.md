@@ -58,9 +58,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - api cashing when non existing route is called
 - fix server crashing after write
 - fixed user/update not checking for existing user before performing update
--
+- 
 ### in progress
-
+- pull user data and update model before updating db with latest information
 ### pending
 
 - users/forgotPassword
