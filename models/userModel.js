@@ -10,6 +10,7 @@ exports.user = {
     "requests":null,
     "lastSeen":null,
     "accountType":null,
+    "verified":null,
     "token":null,
     "deviceDetail":null
 }

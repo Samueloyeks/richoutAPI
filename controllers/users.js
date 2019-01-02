@@ -36,7 +36,9 @@ exports.register = function(data){
                     email : userModel.email,
                     accountType : userModel.accountType,
                     lastSeen : Date(result.user.lastLoginAt),
-                    dateCreated : Date(result.user.createdAt)
+                    dateCreated : Date(result.user.createdAt),
+                    verified : result.user.emailVerified
+
                 }   
             }
             
@@ -87,7 +89,8 @@ exports.login = function(data){
                 uData['uid']= snapshot.key;
                 uData.lastSeen = Date(result.user.lastLoginAt);
                 uData.dateCreated = Date(result.user.createdAt);
-
+                uData.verified = result.user.emailVerified;
+                
                 response = {
                     status:'success',
                     message:'Login Successful',
@@ -181,10 +184,8 @@ exports.update = function(data){
         try{
             
             userModel.fullName = data.fullName;
-            userModel.password = data.password;
             userModel.email = data.email;
             userModel.phoneNumber = data.phoneNumber;
-            userModel.accountType = data.accountType;
            
         }catch(ex){
             // data validation failed
@@ -196,19 +197,7 @@ exports.update = function(data){
                 //Email sent
             });
          
-            response = {
-                status:'success',
-                message:'Registration Successful',
-                data:{
-                    uid : result.user.uid,
-                    fullName : userModel.fullName,
-                    phoneNumber :userModel.phoneNumber,
-                    email :userModel.email,
-                    accountType :userModel.accountType
-                }   
-            }
             
-            resolve(response);
             
            // var database = firebase.database();
             //firebase.database().ref('users/' + userModel.email).set(userModel);
@@ -249,3 +238,30 @@ constructor(public http: Http) {
     });
     
   }  */
+
+  /* this.FirebaseService.loginUserService(email,password).then((authData:any) =>{
+    console.log(authData.user);
+    if(authData.user.emailVerified){
+      loader.dismiss();
+      that.navCtrl.setRoot(TabsPage);     
+    }else{
+      loader.dismiss();
+      const Alert = this.alertCtrl.create({
+        message: 'Please verify email first',
+        buttons: [
+          { text: 'Ok', role: 'cancel' },
+        ]
+      });
+      Alert.present();
+    }
+    
+  },error=>{
+    loader.dismiss();
+    let toast=this.toastCtrl.create({
+      message:error,
+      duration:3000,
+      position:'top'
+    });
+    toast.present();
+   
+  });  */
