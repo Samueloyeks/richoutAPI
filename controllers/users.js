@@ -21,27 +21,32 @@ let register = function(data){
         }catch(ex){
             // data validation failed
         }
+
+        //set account status
+        if(userModel.status == 'admin'){
+            userModel.status = 'pending';
+        }else{
+            userModel.status = 'active';
+        }
+
+        //
         firebase.auth().createUserWithEmailAndPassword(userModel.email, userModel.password)
         .then(function(result){
+            userModel.uid = result.user.uid,
+            userModel.lastSeen = Date(result.user.lastLoginAt),
+            userModel.dateCreated = Date(result.user.createdAt),
+            userModel.verified = result.user.emailVerified
             firebase.database().ref(`/userProfile/` + result.user.uid).set(userModel).then(() => {
-                //firebase.auth().currentUser.sendEmailVerification();
+                firebase.auth().currentUser.sendEmailVerification();
                 //Email sent
             });
             
+            delete userModel['password'];
+
             response = {
                 status:'success',
                 message:'Registration Successful',
-                data:{
-                    uid : result.user.uid,
-                    fullName : userModel.fullName,
-                    phoneNumber : userModel.phoneNumber,
-                    email : userModel.email,
-                    accountType : userModel.accountType,
-                    lastSeen : Date(result.user.lastLoginAt),
-                    dateCreated : Date(result.user.createdAt),
-                    verified : result.user.emailVerified
-
-                }   
+                data:userModel   
             }
             
             resolve(response);
@@ -86,24 +91,24 @@ let login = function(data){
         firebase.auth().signInWithEmailAndPassword(userModel.email, userModel.password)
         .then(function(result){
             firebase.database().ref(`/userProfile/` + result.user.uid).once('value').then(function(snapshot) {
-                uData = snapshot.val();
-                delete uData['password'];
-                uData['uid']= snapshot.key;
-                uData.lastSeen = Date(result.user.lastLoginAt);
-                uData.dateCreated = Date(result.user.createdAt);
-                uData.verified = result.user.emailVerified;
-                if(uData.verified){
+                userModel = snapshot.val();
+                delete userModel['password'];
+                userModel['uid']= snapshot.key;
+                userModel.lastSeen = Date(result.user.lastLoginAt);
+                userModel.dateCreated = Date(result.user.createdAt);
+                userModel.verified = result.user.emailVerified;
+                if(userModel.verified){
                     response = {
                         status:'success',
                         message:'Login Successful',
-                        data:uData
+                        data:userModel
                     }
                     resolve(response);
                 }else{
                     response = {
                         status:'error',
                         message:'Kindly Verify your email address to continue using RichOut.',
-                        data:uData
+                        data:userModel
                     }
                     reject(response);
                 }
@@ -154,16 +159,17 @@ let fetchUserById = function(data){
        
         firebase.database().ref(`/userProfile/` + userModel.uid).once('value').then(function(snapshot) {
            //console.log('got here::fetchUserById')
-            uData = snapshot.val();
+            userModel = snapshot.val();
+            delete userModel['password'];
+            
             //uData.lastSeen = Date(result.user.lastLoginAt);
             //uData.dateCreated = Date(result.user.createdAt);
             //console.log(uData)
             
-            delete uData['password'];
             response = {
                 status:'success',
                 message:'data retrieved successfully',
-                data:uData
+                data:userModel
             }
             resolve(response);
             
@@ -202,51 +208,32 @@ let update = function(data){
         }catch(ex){
             // data validation failed
         }
-        fetchUserById(userModel).then(function(result){
+        firebase.database().ref(`/userProfile/` + userModel.uid).once('value').then(function(snapshot) {
+            userModel = snapshot.val();
+            userModel = data;
+            //console.log(result)
             firebase.database().ref(`/userProfile/` + userModel.uid).update(userModel).then((result) => {
                 response = {
                     status:'success',
                     message:'data updated successfully',
-                    data:result
+                    data:userModel
                 }
                 resolve(response);
                 
             })
-        },function(error){
-            reject(error);
-        })
-        /* ;
-        firebase.auth().createUserWithEmailAndPassword(userModel.email, userModel.password)
-        .then(function(result){
-            delete uData['password'];
-            response = {
-                status:'success',
-                message:'data retrieved successfully',
-                data:uData
-            }
-            resolve(response);
-         
-            
-            
-           // var database = firebase.database();
-            //firebase.database().ref('users/' + userModel.email).set(userModel);
-        }) */
-        /* .catch(function(error) {
+        }).catch(function(error) {
             // Handle Errors here.
             var message = "";
             var errorCode = error.code;
             var errorMessage = error.message;
-           
             response = {
                 'status':'error',
-                'message':error.message,
+                'message':'an error occured during account update',
                 'data':data
             }
             reject(response);
         });
-         */
-        
-    });
+    });    
 
 }
 
@@ -282,7 +269,7 @@ let forgotPassword = function(data){
 
 }
 
-let forgotPassword = function(data){
+/* let forgotPassword = function(data){
     
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
@@ -314,7 +301,7 @@ let forgotPassword = function(data){
         
 
 
-}
+} */
 
 module.exports = {
     fetchUserById,
