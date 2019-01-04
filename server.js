@@ -20,10 +20,12 @@ let hostname = "";
 ///application state (live/test)
 if(utilities.models.appConfig.appState == 'live'){
   hostname = utilities.models.appConfig.liveHostName;
-  port = utilities.models.appConfig.liveHostName;
+  port = utilities.models.appConfig.livePort;
+  console.log('live')
 }else{
   hostname = utilities.models.appConfig.testHostName;
   port = utilities.models.appConfig.testPort;
+  console.log('test')
 }
 
 
@@ -46,15 +48,6 @@ if (req.method === 'OPTIONS') {
 if(utilities.validateAuth(req,utilities.models.appConfig)){
   // validation succesful
   console.log('validation successful')
-}else{
-  //validation failed
-  responseObj['status'] = 'error';
-  responseObj.message = utilities.models.resCodes['401'].message;
-  responseObj.headerCode = utilities.models.resCodes['401'].code;
-  endRequest();
-}
-
-
   let data = []
   req.on('data', chunk => {
     data.push(chunk)
@@ -74,7 +67,16 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     processRequest(data);      
     
   })
+}else{
+  //validation failed
+  responseObj['status'] = 'error';
+  responseObj.message = utilities.models.resCodes['401'].message;
+  responseObj.headerCode = utilities.models.resCodes['401'].code;
+  endRequest();
+}
+
   
+
   function processRequest(data){
     //res.statusCode = 200;
     //res.setHeader('Content-Type', 'application/json');
