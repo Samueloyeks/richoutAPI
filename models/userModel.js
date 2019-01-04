@@ -1,5 +1,6 @@
 exports.user = {
-    "id":null,
+    "id":null,    
+    "uid":null,
     "fullName":null,
     "phoneNumber":null,    
     "email":null,
@@ -11,6 +12,7 @@ exports.user = {
     "lastSeen":null,
     "accountType":null,
     "verified":null,
+    "status":null,
     "token":null,
     "deviceDetail":null
-}
+} 
