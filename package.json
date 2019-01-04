@@ -1,0 +1,25 @@
+{
+  "name": "richoutapi",
+  "version": "1.0.0",
+  "description": "api for richout app",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://zinoadidi@bitbucket.org/richoutng/richoutapi.git"
+  },
+  "keywords": [
+    "richout"
+  ],
+  "author": "Zino Adidi",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/richoutng/richoutapi#readme",
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "firebase": "^5.7.1",
+    "tsscmp": "^1.0.6"
+  }
+}
