@@ -1,5 +1,6 @@
 const http = require('http');
 const utilities = require('./controllers/utilities');
+console.log('1')
 //var cors = require('cors');
 
 /* var corsOptions = {
@@ -17,6 +18,8 @@ let responseObj = utilities.models.responseObj;
 let response = '';
 let port = "";
 let hostname = "";
+console.log('2')
+
 ///application state (live/test)
 if(utilities.models.appConfig.appState == 'live'){
   hostname = utilities.models.appConfig.liveHostName;
@@ -28,21 +31,30 @@ if(utilities.models.appConfig.appState == 'live'){
   console.log('test')
 }
 
+console.log('3')
 
 
 utilities.firebase.initializeApp(utilities.models.firebaseConfig);
+console.log('4')
 
 let file= Array();
+console.log('5')
 
 const app = http.createServer((req, res) => {
+  console.log('6')
 
 // handle cors options
 if (req.method === 'OPTIONS') {
   responseObj['status'] = 'error';
   responseObj.message = utilities.models.resCodes['204'].message;
   responseObj.headerCode = utilities.models.resCodes['204'].code;
+console.log('7')
+  
   endRequest();
+console.log('this should not show')
+  
 }
+console.log('options done and dusted')
 
 // allow access after api authentication is successful
 if(utilities.validateAuth(req,utilities.models.appConfig)){
@@ -58,6 +70,8 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
       data = JSON.parse(data)
       
     }catch(ex){
+      console.log(ex)
+      
       //responseObj['data'] = data;
       responseObj['status'] = 'error';
       responseObj.message = utilities.models.resCodes.invalid_data.message;
