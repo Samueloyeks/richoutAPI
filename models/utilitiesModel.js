@@ -66,7 +66,8 @@ exports.resCodes = {
 }
 
 exports.appConfig={
-    appState:'test',
+    appState:'live',
+    serverURL:global.serverURL,
     liveHostName:'0.0.0.0',
     livePort:3000,
     testHostName:'127.0.0.1',
