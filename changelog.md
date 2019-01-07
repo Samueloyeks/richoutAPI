@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - 
 ### in progress
 - pull user data and update model before updating db with latest information
+- 
 ### pending
 
 - users/forgotPassword

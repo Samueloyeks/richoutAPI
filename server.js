@@ -1,5 +1,6 @@
 const http = require('http');
 const utilities = require('./controllers/utilities');
+var fs = require('fs');
 //var cors = require('cors');
 
 /* var corsOptions = {
@@ -17,37 +18,67 @@ let responseObj = utilities.models.responseObj;
 let response = '';
 let port = "";
 let hostname = "";
+
+
 ///application state (live/test)
 if(utilities.models.appConfig.appState == 'live'){
   hostname = utilities.models.appConfig.liveHostName;
   port = utilities.models.appConfig.livePort;
-  console.log('live')
+  // console.log('live')
 }else{
   hostname = utilities.models.appConfig.testHostName;
   port = utilities.models.appConfig.testPort;
-  console.log('test')
+  // console.log('test')
 }
 
+// console.log('3')
 
 
 utilities.firebase.initializeApp(utilities.models.firebaseConfig);
+// console.log('4')
 
 let file= Array();
+// console.log('5')
 
 const app = http.createServer((req, res) => {
+  // console.log('6')
+// handle requests for files
+if(req.url.split('/')[1] == 'uploads'){
+  res.writeHead(200,{'content-type':'image/jpg'});
+  fs.readFile('./'+req.url, function(ex,data){
+    if(ex){
+      res.end(String(ex));
+      
+    }else{
+      res.end(data);
 
+    }
+  });
+  //responseObj.headerCode = utilities.models.resCodes['200'].code;
+  return false;
+  //endRequest();
+} 
+//// set server url in config
+global.serverURL = req.headers.host;
 // handle cors options
 if (req.method === 'OPTIONS') {
   responseObj['status'] = 'error';
   responseObj.message = utilities.models.resCodes['204'].message;
   responseObj.headerCode = utilities.models.resCodes['204'].code;
+// console.log('7')
+  
   endRequest();
+// console.log('this should not show')
+  
 }
+
+
+// console.log('options done and dusted')
 
 // allow access after api authentication is successful
 if(utilities.validateAuth(req,utilities.models.appConfig)){
   // validation succesful
-  console.log('validation successful')
+  // console.log('validation successful')
   let data = []
   req.on('data', chunk => {
     data.push(chunk)
@@ -58,6 +89,8 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
       data = JSON.parse(data)
       
     }catch(ex){
+      // console.log(ex)
+      
       //responseObj['data'] = data;
       responseObj['status'] = 'error';
       responseObj.message = utilities.models.resCodes.invalid_data.message;
@@ -72,6 +105,7 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
   responseObj['status'] = 'error';
   responseObj.message = utilities.models.resCodes['401'].message;
   responseObj.headerCode = utilities.models.resCodes['401'].code;
+  response.data = null;
   endRequest();
 }
 
@@ -87,10 +121,13 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     var controller = '';
     
     try{ 
+      
       file = require('./controllers/'+String(url[1]));
+      
       // call the function using dynamic function name and dynamic module name
       //res.write('first succeed');
     }catch(ex){
+      // console.log(ex);
       responseObj['status'] = 'error';
       responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
       responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
@@ -102,6 +139,7 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     try{
       //res.write(file[url[2]]());
       var functionName = url[2];
+      // console.log(String(url[2]));
 
       // pass data to dynamic promise function # module.function(data).then....
       file[functionName](data).then(function(result){
@@ -121,9 +159,12 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
       endRequest();
     })
   }catch(ex){
+    // console.log(ex);
+    
     responseObj['status'] = 'error';
     responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
     responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
+    
     endRequest();
     
   };
@@ -131,7 +172,7 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
   }
 
   function endRequest(){
-    console.log("\nNew write about to happen")
+    // console.log("\nNew write about to happen")
     res.writeHead(responseObj.headerCode,utilities.models.headers);
    
 /*     res.write(JSON.stringify(responseObj),function(success){},function(error){res.end();
@@ -139,16 +180,16 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
      */
     res.end(JSON.stringify(responseObj));
     return false;
-    /* console.log("\nApplication Ended")
+    /* // console.log("\nApplication Ended")
     
     return false;
-    console.log('suprise me!') */
+    // console.log('suprise me!') */
   }
 });
 //app.use(cors(corsOptions));
 
 app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  // console.log(`Server running at http://${hostname}:${port}/`);
 });
 
 ////////
