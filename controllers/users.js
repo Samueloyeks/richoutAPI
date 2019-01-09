@@ -17,6 +17,7 @@ let register = function(data){
             userModel.email = data.email;
             userModel.phoneNumber = data.phoneNumber;
             userModel.accountType = data.accountType;
+            userModel.profilePhotoUrl = data.profilePhotoUrl
            
         }catch(ex){
             // data validation failed

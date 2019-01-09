@@ -14,5 +14,6 @@ exports.user = {
     "verified":null,
     "status":null,
     "token":null,
-    "deviceDetail":null
+    "deviceDetail":null,
+    "profilePhotoUrl":null
 } 
