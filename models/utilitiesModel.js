@@ -65,6 +65,7 @@ exports.resCodes = {
     }
 }
 
+
 exports.appConfig={
     appState:'live',
     serverURL:global.serverURL,
