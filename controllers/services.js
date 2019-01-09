@@ -6,14 +6,17 @@ let upload = function(data){
     return new Promise (function(resolve,reject){
         
         if(data.image){
+            console.log("base64 received==============================")
             console.log(data.image)
-            var base64Data = data.image.split(',');   
-            console.log(base64Data)   
+            console.log("==============================")
+            var base64Data = data.image.split(',');    
             var imgBaseURL = 'uploads/'+Date.now()+'.png';     
             require("fs").writeFile(String(imgBaseURL),base64Data[1], 'base64', function(err) {
-                console.log(base64Data[1])
-                console.log(err);
+                console.log('An error: '+err);
             });
+            console.log("base64 split==============================")
+            console.log(base64Data[1])
+            console.log("==============================")
             let response = new Object();
             var downloadURL = 'http://'+global.serverURL+'/'+imgBaseURL;
             // Base64 formatted string
