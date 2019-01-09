@@ -5,7 +5,7 @@ let firebase = utilities.firebase;
 /// modules
 
 let register = function(data){
-   
+   console.log('registration data: '+data)
     return new Promise (function(resolve,reject){
         let userModel =  require('../models/userModel');
         userModel = userModel.user;
@@ -23,16 +23,18 @@ let register = function(data){
             // data validation failed
         }
 
-        //set account status
+        
+        //set account status 
         if(userModel.status == 'admin'){
             userModel.status = 'pending';
         }else{
             userModel.status = 'active';
         }
-
+        console.log('sending to firebase: '+userModel)
         //
         firebase.auth().createUserWithEmailAndPassword(userModel.email, userModel.password)
         .then(function(result){
+            console.log('data from firebase: '+result)
             userModel.uid = result.user.uid,
             userModel.lastSeen = Date(result.user.lastLoginAt),
             userModel.dateCreated = Date(result.user.createdAt),
