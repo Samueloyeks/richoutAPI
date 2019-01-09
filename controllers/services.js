@@ -6,9 +6,10 @@ let upload = function(data){
     return new Promise (function(resolve,reject){
         
         if(data.image){
-            console.log("base64 received==============================")
-            console.log(data.image)
-            console.log("==============================")
+            console.log("base64 received==============================\n");
+            console.log("base64 received==============================");
+            console.log(data.image);
+            console.log("==============================");
             var base64Data = data.image.split(',');    
             var imgBaseURL = 'uploads/'+Date.now()+'.png';     
             require("fs").writeFile(String(imgBaseURL),base64Data[1], 'base64', function(err) {
