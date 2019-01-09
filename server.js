@@ -91,7 +91,9 @@ if(utilities.validateAuth(req,utilities.models.appConfig)){
     try{
      
       data = JSON.parse(data)
-      
+      console.log("base64 received================================server.js log")
+      console.log(data)
+      console.log("===============================================")
     }catch(ex){
       console.log(ex)
       
