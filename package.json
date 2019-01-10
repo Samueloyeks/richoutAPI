@@ -19,7 +19,14 @@
   "homepage": "https://bitbucket.org/richoutng/richoutapi#readme",
   "dependencies": {
     "basic-auth": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express-basic-auth": "^1.1.6",
+    "file-system": "^2.2.2",
     "firebase": "^5.7.1",
+    "fs": "0.0.1-security",
+    "richout": "file:express",
     "tsscmp": "^1.0.6"
-  }
+  },
+  "devDependencies": {}
 }

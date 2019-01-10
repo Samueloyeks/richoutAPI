@@ -1,19 +1,11 @@
-const http = require('http');
+const express = require('./node_modules/richout/node_modules/express');
+var cors = require('cors');
+const app = express();
+app.use(cors());
 const utilities = require('./controllers/utilities');
-var fs = require('fs');
-
-
-//var cors = require('cors');
-
-/* var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-} */
+var fs = require('file-system');
+app.use(require('body-parser').json());
+var basicAuth = require('basic-auth');
 
 
 let responseObj = utilities.models.responseObj;
@@ -21,181 +13,70 @@ let response = ''
 let port = "";
 let hostname = "";
 
-
-///application state (live/test)
-if(utilities.models.appConfig.appState == 'live'){
+if (utilities.models.appConfig.appState == 'live') {
   hostname = utilities.models.appConfig.liveHostName;
   port = utilities.models.appConfig.livePort;
   console.log('live')
-}else{
+} else {
   hostname = utilities.models.appConfig.testHostName;
   port = utilities.models.appConfig.testPort;
   console.log('test')
 }
 
-console.log('3')
-
-
 utilities.firebase.initializeApp(utilities.models.firebaseConfig);
-console.log('4')
-
-let file= Array();
-console.log('5')
-
-const app = http.createServer((req, res) => {
-  console.log('6')
-// handle requests for files
-if(req.url.split('/')[1] == 'uploads'){ 
-  // console.log(eq.url.split('/')[1])
-  res.writeHead(200,{'content-type':'image/jpg'});
-  fs.readFile('./'+req.url, function(ex,data){
-    // console.log(fs.readFile('./'+req.url))
-    if(ex){
-      res.end(String(ex));
-      console.log(ex)
-    }else{
-      res.end(data);
-      console.log(data)
-    }
-  });
-  //responseObj.headerCode = utilities.models.resCodes['200'].code;
-  return false;
-  //endRequest();
-} 
-//// set server url in config
-global.serverURL = req.headers.host;
-// handle cors options
-if (req.method === 'OPTIONS') {
-  responseObj['status'] = 'error';
-  responseObj.message = utilities.models.resCodes['204'].message;
-  responseObj.headerCode = utilities.models.resCodes['204'].code;
-console.log('7')
-  
-  endRequest();
-console.log('this should not show')
-  
-}
 
 
-console.log('options done and dusted')
 
-// allow access after api authentication is successful
-if(utilities.validateAuth(req,utilities.models.appConfig)){
-  // validation succesful
-  console.log('validation successful')
-  let data = []
-  req.on('data', chunk => {
-    data.push(chunk)
-  });
-  req.on('end', () => {
-    try{
-     
-      data = JSON.parse(data)
-      console.log("base64 received================================server.js log")
-      console.log(data)
-      console.log("===============================================")
-    }catch(ex){
-      console.log(ex)
-      
-      //responseObj['data'] = data;
-      responseObj['status'] = 'error';
-      responseObj.message = utilities.models.resCodes.invalid_data.message;
-      responseObj.headerCode = utilities.models.resCodes.invalid_data.code;
-      endRequest();
-    }
-    processRequest(data);      
-     
-  })
-}else{
-  //validation failed
-  responseObj['status'] = 'error';
-  responseObj.message = utilities.models.resCodes['401'].message;
-  responseObj.headerCode = utilities.models.resCodes['401'].code;
-  response.data = null;
-  endRequest();
-}
+app.get('/uploads/*', function (req, res) {
+  // var filepath = req.protocol + '://' + req.get('host') + req.originalUrl;
+  filepath = './'+req.url
+  console.log('request url: ' + req.url);
+  console.log(filepath)
+  // var filepath = './'+req.url;
 
-  
-
-  function processRequest(data){
-    //res.statusCode = 200;
-    //res.setHeader('Content-Type', 'application/json');
-    var url = req.url.split('/');
-    //var fileName = '../controllers/'+String(url[1])
-    var fileName = './controllers'+req.url
-
-    var controller = '';
-    
-    try{ 
-      
-      file = require('./controllers/'+String(url[1]));
-      
-      // call the function using dynamic function name and dynamic module name
-      //res.write('first succeed');
-    }catch(ex){
-      console.log(ex);
-      responseObj['status'] = 'error';
-      responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
-      responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
-      endRequest();
-      
-    };
-
-
-    try{
-      //res.write(file[url[2]]());
-      var functionName = url[2];
-      console.log(String(url[2]));
-
-      // pass data to dynamic promise function # module.function(data).then....
-      file[functionName](data).then(function(result){
-        responseObj.data = result['data'];
-        responseObj.status  = result['status'];
-        responseObj.message = result.message;
-        responseObj.headerCode = utilities.models.resCodes.request_succesful.code;
-        
-        endRequest();
-      },
-    function(error){
-      responseObj['data'] = error['data'];
-      responseObj['status'] = error['status'];
-      responseObj.message = error.message;
-      responseObj.headerCode = utilities.models.resCodes.request_failed.code;
-        
-      endRequest();
-    })
-  }catch(ex){
-    console.log(ex);
-    
-    responseObj['status'] = 'error';
-    responseObj.message = utilities.models.resCodes.route_not_found.message+' '+req.url;
-    responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
-    
-    endRequest();
-    
-  };
-
-  }
-
-  function endRequest(){
-    console.log("\nNew write about to happen")
-    res.writeHead(responseObj.headerCode,utilities.models.headers);
-   
-/*     res.write(JSON.stringify(responseObj),function(success){},function(error){res.end();
-    });
-     */
-    res.end(JSON.stringify(responseObj));
-    return false;
-    /* console.log("\nApplication Ended")
-    
-    return false;
-    console.log('suprise me!') */
-  }
+  res.sendFile(__dirname+req.url);
+ 
 });
-//app.use(cors(corsOptions));
 
-app.listen(port, hostname, () => {
+app.post('/*', utilities.validateAuth, function (req, res) {
+  global.serverURL = req.headers.host;
+  data = req.body;
+  console.log('request url: ' + req.url);
+  var url = req.url.split('/');
+  console.log(url)
+
+  try {
+    console.log('./controllers/' + url[1])
+    var module = require(String('./controllers/' + url[1]));
+    module[url[2]](data)
+      .then(
+        function (result) {
+          responseObj.data = result['data'];
+          responseObj.status = result['status'];
+          responseObj.message = result.message;
+          responseObj.headerCode = utilities.models.resCodes.request_succesful.code;
+
+          res.json(responseObj);
+        },
+        function (error) {
+          responseObj['data'] = error['data'];
+          responseObj['status'] = error['status'];
+          responseObj.message = error.message;
+          responseObj.headerCode = utilities.models.resCodes.request_failed.code;
+
+          // res.writeHead(responseObj.headerCode,utilities.models.headers);
+          res.status(responseObj.headerCode, utilities.models.headers).json(responseObj);
+        })
+    console.log('successful');
+  } catch (ex) {
+    console.log(ex)
+    responseObj['status'] = 'error';
+    responseObj.message = utilities.models.resCodes.route_not_found.message + ' ' + req.url;
+    responseObj.headerCode = utilities.models.resCodes.route_not_found.code;
+    res.json(responseObj)
+  }
+
+});
+app.listen(process.env.PORT || port,hostname,() => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-////////
