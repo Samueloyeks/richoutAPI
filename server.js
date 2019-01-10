@@ -1,10 +1,7 @@
-const express = require('./node_modules/richout/node_modules/express');
+// const express = require('./node_modules/richout/node_modules/express');
 var cors = require('cors');
-const app = express();
-app.use(cors());
 const utilities = require('./controllers/utilities');
 var fs = require('file-system');
-app.use(require('body-parser').json());
 var basicAuth = require('basic-auth');
 
 
@@ -16,13 +13,17 @@ let hostname = "";
 if (utilities.models.appConfig.appState == 'live') {
   hostname = utilities.models.appConfig.liveHostName;
   port = utilities.models.appConfig.livePort;
+  var express = require('./express')
   console.log('live')
 } else {
   hostname = utilities.models.appConfig.testHostName;
   port = utilities.models.appConfig.testPort;
+  var express = require('./node_modules/richout/node_modules/express');
   console.log('test')
 }
-
+const app = express();
+app.use(cors());
+app.use(require('body-parser').json());
 utilities.firebase.initializeApp(utilities.models.firebaseConfig);
 
 
