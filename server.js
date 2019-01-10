@@ -1,4 +1,4 @@
-// const express = require('./node_modules/richout/node_modules/express');
+const express = require('./node_modules/richout/node_modules/express');
 var cors = require('cors');
 const utilities = require('./controllers/utilities');
 var fs = require('file-system');
@@ -14,12 +14,12 @@ let hostname = "";
 if (utilities.models.appConfig.appState == 'live') {
   hostname = utilities.models.appConfig.liveHostName;
   port = utilities.models.appConfig.livePort;
-  var express = require('./express')
+  // var express = require('./express')
   console.log('live')
 } else {
   hostname = utilities.models.appConfig.testHostName;
   port = utilities.models.appConfig.testPort;
-  var express = require('./node_modules/richout/node_modules/express');
+  // var express = require('./node_modules/richout/node_modules/express');
   console.log('test')
 }
 const app = express();
